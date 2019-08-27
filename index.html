@@ -4,7 +4,59 @@
       <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       <style>
-        @import "style.css";
+        /* Uncomment for to use this pen in a external site.
+        */
+      @import url('https://code.getmdl.io/1.1.3/material.indigo-pink.min.css');
+      @import "@material/button/mdc-button";
+
+        body{
+          background: #FF4081; }
+        
+        a {
+        text-decoration: none; }
+        
+        .jst-material-input-file {
+          margin-top: 70px; }
+        
+        .container{
+          width: 400px;
+          padding: 40px 20px;
+          right: 0;
+          left: 0;
+          background: #fff;
+          margin: auto; }
+        
+        h2{
+          margin-bottom: -30px;
+          text-align: center;}
+        
+        h6{
+          margin-bottom: 30px;
+          color: gray;
+          text-align: center;
+          padding: 10px; }
+        
+        .file-upload {
+            margin: 10px 10px 10px 0px;
+        }
+        .file-upload input.upload {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            margin: 0px;
+            padding: 0px;
+          z-index: 10;
+            font-size: 20px;
+            cursor: pointer;
+            height: 36px;
+            opacity: 0;
+            filter: alpha(opacity=0); }
+        
+        #fileuploadurl{
+          border: none;
+          font-size: 12px;
+          padding-left: 0;
+          width: 250px; }
       </style>
       <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
       <script src="https://unpkg.com/material-components-web/dist/material-components-web.min.js"></script>
@@ -19,14 +71,14 @@
         <h6>Enter your PDF code here:</h6>
         <label for="codeinput">Enter the PDF code shown in the braveyourself app here:</label>
         <br>
-        <form id="formUploadPdf" action = "http://127.0.0.1:80/upload" method = "POST">
-          <input id="codeinput" name="codeinput" type='text ' />
+        <form id="formUploadPdf" action = "http://127.0.0.1:80/upload" method = "POST" enctype="multipart/form-data" >
+          <input id="codeinput" name="codeinput" type='text' />
           <br>
 
           <div class="file-upload mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-              <span type="submit" action='http://localhost:80/upload'>BROWSE PDF</span>
-              <input id="FileAttachment" type="file" name="sampleFile" class="upload" />
-          </div>
+              <span type="submit">BROWSE PDF</span>
+              <input id="FileAttachment" type="file" name="sampleFile" class="upload" accept="application/pdf"/>
+            </div>
         </form>
         <script>
             document.getElementById("FileAttachment").onchange = function () {

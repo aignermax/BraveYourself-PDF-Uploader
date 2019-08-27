@@ -1,43 +1,52 @@
-const express = require('express');
-const fileUpload = require('express-fileupload');
-const app = express();
+var formidable = require('formidable'),
+    http = require('http'),
+    fs = require('fs'),
+    util = require('util');
+
 const port = 80;
 
-// default options
-app.use(fileUpload());
-
-app.post('/upload', function(req, res) {
-    
-    console.log("upload endpoint");
-    if (Object.keys(req.files).length == 0) {
-        return res.status(400).send('No files were uploaded.');
+fs.readFile('./index.html' , function (err, html) {
+    if(err){
+        throw err;
     }
-    console.log("sending reg:");
-    console.log(Object.keys(req));
-    console.log("req = " + req.body);
-    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-    let sampleFile = req.body.sampleFile;
-    let TargetFileName = req.body.codeinput + ".pdf";
-    console.log("samplefile = " + sampleFile);
-    console.log("codeinput  = " + TargetFileName);
+    console.log("html loaded - start Server listening to port: " + port);
+    http.createServer(function(req, res) {
+        if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
+            // parse a file upload
+            var form = new formidable.IncomingForm();
+            form.uploadDir = __dirname + "/uploads";
+            form.parse(req, function(err, fields, files) {
+                res.writeHead(200, {'content-type': 'text/plain'});
+                res.write('received upload:\n\n');
+                res.end(util.inspect({fields: fields, files: files}));
+                console.log("upload finished ");
+                if(files && files.sampleFile && files.sampleFile.path && fields && fields.codeinput){
+                    console.log(files.sampleFile.path + " " + fields.codeinput);
+                    fs.rename(files.sampleFile.path, form.uploadDir + "/" + fields.codeinput + ".pdf" , function (err) {
+                        if (err) throw err;
+                        console.log('renamed complete');
+                    });
+                } else {
+                    console.log("Error -> files.sampleFile or fields.codeinput not defined");
+                }
+                
+            });
+            form = null;
+            return;
+        } else if (req.url == '/download' && req.method.toLowerCase() == 'post') {
+            // download a pdf file.
+            var form = new formidable.IncomingForm();
+            form.parse(req, function(err, fields, files){
+                res.writeHead(200, {'content-type': 'text/plain'})
+            })
 
-    // Use the mv() method to place the file somewhere on your server
-    sampleFile.mv('uploads/' + TargetFileName , function(err) {
-        if (err){
-            console.log("Error: " + err);
-            return res.status(500).send(err);
         }
-        res.send('File uploaded!');
-    });
+        console.log("url = " + req.url);
+        // show a file upload form
+        res.writeHead(200, {'content-type': 'text/html'});
+        res.write(html);
+        res.end();
+
+      }).listen(port);
 });
 
-app.get('/presentationfile', function (req, res) {
-    res.sendFile( __dirname + "/" + "index.htm" );
- })
-
-var server = app.listen(port, function () {
-   var host = server.address().address
-   var port = server.address().port
-   
-   console.log("Example app listening at http://%s:%s", host, port)
-});
