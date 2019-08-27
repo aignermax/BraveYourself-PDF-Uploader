@@ -2,7 +2,6 @@ var formidable = require('formidable'),
     http = require('http'),
     fs = require('fs'),
     util = require('util');
-
 const port = 80;
 
 fs.readFile('./index.html' , function (err, html) {
@@ -50,6 +49,15 @@ fs.readFile('./index.html' , function (err, html) {
                             var readStream = fs.createReadStream(filePath);
                             // We replaced all the event handlers with a simple call to readStream.pipe()
                             readStream.pipe(res);
+                            readStream.on("finish" , () => {
+                                console.log('All writes are now complete - deleting old PDF file now.');
+                                fs.unlink(filePath, (err) => {
+                                    if (err) {
+                                      console.error(err)
+                                      return
+                                    }
+                                });                                  
+                            });
                         } else {
                             res.writeHead(400, {"Content-Type": "text/plain"});
                             res.end("ERROR File does not exist");
