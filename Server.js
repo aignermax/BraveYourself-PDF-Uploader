@@ -57,9 +57,7 @@ fs.readFile('./index.html' , function (err, html) {
                     });
                 }
             })
-            form = null;
             return;
-
         }
         console.log("url = " + req.url);
         // show a file upload form
