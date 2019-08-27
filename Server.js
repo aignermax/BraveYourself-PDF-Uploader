@@ -47,7 +47,7 @@ fs.readFile('./index.html' , function (err, html) {
             var form = new formidable.IncomingForm();
             form.parse(req, function(err, fields, files){
                 if (fields && fields.codeinput){
-                    var filePath = uploadsPath + fields.codeinput + ".pdf";
+                    var filePath = uploadsPath + "/"+ fields.codeinput + ".pdf";
                     fs.exists(filePath, function(exists){
                         if (exists) {   
                             var pdfFileStat = fs.statSync(filePath);
