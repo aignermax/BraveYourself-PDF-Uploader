@@ -3,7 +3,16 @@ var formidable = require('formidable'),
     fs = require('fs'),
     util = require('util');
 const port = 8012;
+const uploadsPath = __dirname + "/uploads";
 
+// if Uploads folder does not exist -> create it.
+fs.exists(uploadsPath, function(exists){
+    if (!exists) {
+        fs.mkdirSync(uploadsPath);
+     }
+});
+
+// read Index html and start server
 fs.readFile('./index.html' , function (err, html) {
     if(err){
         throw err;
@@ -13,7 +22,7 @@ fs.readFile('./index.html' , function (err, html) {
         if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
             // parse a file upload
             var form = new formidable.IncomingForm();
-            form.uploadDir = __dirname + "/uploads";
+            form.uploadDir = uploadsPath;
             form.parse(req, function(err, fields, files) {
                 res.writeHead(200, {'content-type': 'text/plain'});
                 res.write('received upload:\n\n');
@@ -38,7 +47,7 @@ fs.readFile('./index.html' , function (err, html) {
             var form = new formidable.IncomingForm();
             form.parse(req, function(err, fields, files){
                 if (fields && fields.codeinput){
-                    var filePath = __dirname + "/uploads/" + fields.codeinput + ".pdf";
+                    var filePath = uploadsPath + fields.codeinput + ".pdf";
                     fs.exists(filePath, function(exists){
                         if (exists) {   
                             var pdfFileStat = fs.statSync(filePath);
