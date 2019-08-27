@@ -2,7 +2,7 @@ var formidable = require('formidable'),
     http = require('http'),
     fs = require('fs'),
     util = require('util');
-const port = 80;
+const port = 8012;
 
 fs.readFile('./index.html' , function (err, html) {
     if(err){
