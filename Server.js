@@ -18,27 +18,47 @@ fs.readFile('./index.html' , function (err, html) {
             form.parse(req, function(err, fields, files) {
                 res.writeHead(200, {'content-type': 'text/plain'});
                 res.write('received upload:\n\n');
-                res.end(util.inspect({fields: fields, files: files}));
-                console.log("upload finished ");
+                res.end("upload finished"); // util.inspect({fields: fields, files: files})
+                // rename File to the codeinput value
                 if(files && files.sampleFile && files.sampleFile.path && fields && fields.codeinput){
                     console.log(files.sampleFile.path + " " + fields.codeinput);
                     fs.rename(files.sampleFile.path, form.uploadDir + "/" + fields.codeinput + ".pdf" , function (err) {
-                        if (err) throw err;
+                        if (err) {
+                            console.log("Error at renaming file" + err);
+                        };
                         console.log('renamed complete');
                     });
                 } else {
                     console.log("Error -> files.sampleFile or fields.codeinput not defined");
                 }
-                
             });
-            form = null;
             return;
+
+        // download a pdf file.    
         } else if (req.url == '/download' && req.method.toLowerCase() == 'post') {
-            // download a pdf file.
             var form = new formidable.IncomingForm();
             form.parse(req, function(err, fields, files){
-                res.writeHead(200, {'content-type': 'text/plain'})
+                if (fields && fields.codeinput){
+                    var filePath = __dirname + "/uploads/" + fields.codeinput + ".pdf";
+                    fs.exists(filePath, function(exists){
+                        if (exists) {   
+                            var pdfFileStat = fs.statSync(filePath);
+                            res.writeHead(200, {
+                                'Content-Type': 'application/pdf',
+                                'Content-Length': pdfFileStat.size
+                            });
+                            var readStream = fs.createReadStream(filePath);
+                            // We replaced all the event handlers with a simple call to readStream.pipe()
+                            readStream.pipe(res);
+                        } else {
+                            res.writeHead(400, {"Content-Type": "text/plain"});
+                            res.end("ERROR File does not exist");
+                        }
+                    });
+                }
             })
+            form = null;
+            return;
 
         }
         console.log("url = " + req.url);
