@@ -1,0 +1,32 @@
+{
+  "name": "pdf_uploader",
+  "version": "1.0.0",
+  "description": "uploads a pdf file so that we can use it for public speaking",
+  "main": "Server.js",
+  "dependencies": {
+    "@material/animation": "^3.1.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
+    "material-components-web": "^3.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ma68546/BraveYourself-PDF-Uploader.git"
+  },
+  "keywords": [
+    "braveyourself",
+    "public",
+    "speaking"
+  ],
+  "author": "max aigner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ma68546/BraveYourself-PDF-Uploader/issues"
+  },
+  "homepage": "https://github.com/ma68546/BraveYourself-PDF-Uploader#readme"
+}

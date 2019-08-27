@@ -1,0 +1,53 @@
+/* Uncomment for to use this pen in a external site.
+   */
+@import url('https://code.getmdl.io/1.1.3/material.indigo-pink.min.css');
+@import "@material/button/mdc-button";
+
+  body{
+    background: #FF4081; }
+  
+  a {
+  text-decoration: none; }
+  
+  .jst-material-input-file {
+    margin-top: 70px; }
+  
+  .container{
+    width: 400px;
+    padding: 40px 20px;
+    right: 0;
+    left: 0;
+    background: #fff;
+    margin: auto; }
+  
+  h2{
+    margin-bottom: -30px;
+    text-align: center;}
+  
+  h6{
+    margin-bottom: 30px;
+    color: gray;
+    text-align: center;
+    padding: 10px; }
+  
+  .file-upload {
+      margin: 10px 10px 10px 0px;
+  }
+  .file-upload input.upload {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      margin: 10px;
+      padding: 10px;
+    z-index: 10;
+      font-size: 20px;
+      cursor: pointer;
+      height: 36px;
+      opacity: 0;
+      filter: alpha(opacity=0); }
+  
+  #fileuploadurl{
+    border: none;
+    font-size: 12px;
+    padding-left: 0;
+    width: 250px; }
